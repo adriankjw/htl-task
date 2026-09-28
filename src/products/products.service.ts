@@ -31,63 +31,48 @@ export class ProductsService {
   }
 
   async findOne(sku: string) {
-    try {
-      const authUrl = this.BASE_URL + '/auth/login';
-      
-      // Form data payload
-      const payload = {
-        email: 'admin@shop.test',
-        password: 'password123'
-      };
-
-      const headers = {
-        'Content-Type': 'application/json',
-      };
-
-      const { data } = await firstValueFrom(
-        this.httpService.post(authUrl, payload, { headers }).pipe(
-          catchError((error: AxiosError) => {
-            throw new HttpException(
-              error.response?.data || 'External Authentication Failed',
-              error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
-            );
-          }),
-        ),
-      );
-
-      console.log(data);
-
-      const access_token = data["accessToken"];
-
-      const productUrl = this.BASE_URL + `/products/${sku}`;
-
-      console.log(sku);
-
-      const response = await firstValueFrom(
-        this.httpService.get(productUrl, {
-          headers: {
-            accept: '*/*',
-            Authorization: `Bearer ${access_token}`,
-          },
-        }),
-      );
-
-      console.log(response);
-      return response.data;
-    } catch(e) {
-      console.log(e);
-    }
+    const authUrl = this.BASE_URL + '/auth/login';
     
-    // const product = await this._dataSource
-    //   .createQueryBuilder(Product, 'product')
-    //   .where('product.sku = :sku', { sku })
-    //   .getOne();
+    // Form data payload
+    const payload = {
+      email: 'admin@shop.test',
+      password: 'password123'
+    };
 
-    // if (!product) {
-    //   throw new NotFoundException(`Product with SKU "${sku}" not found`);
-    // }
+    const headers = {
+      'Content-Type': 'application/json',
+    };
 
-    // return product;
+    const { data } = await firstValueFrom(
+      this.httpService.post(authUrl, payload, { headers }).pipe(
+        catchError((error: AxiosError) => {
+          throw new HttpException(
+            error.response?.data || 'External Authentication Failed',
+            error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        }),
+      ),
+    );
+
+    console.log(data);
+
+    const access_token = data["accessToken"];
+
+    const productUrl = this.BASE_URL + `/products/${sku}`;
+
+    console.log(sku);
+
+    const response = await firstValueFrom(
+      this.httpService.get(productUrl, {
+        headers: {
+          accept: '*/*',
+          Authorization: `Bearer ${access_token}`,
+        },
+      }),
+    );
+
+    console.log(response);
+    return response.data;
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {

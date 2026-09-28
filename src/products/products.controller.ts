@@ -17,10 +17,10 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.productsService.findOne(id);
+  // }
 
   @Get(':sku')
   findOneBySKU(@Param('sku') sku: string) {
